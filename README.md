@@ -1,5 +1,8 @@
 # agillists-in-the-loop
+
 a hypothetical system to enable xtreme programming concept through ai and literate programming
+
+> the problem i believe, is that i'm a bit lazy, but i do have a love for writing long novels (if i could find the time) 
 
 ## gist
 
@@ -109,6 +112,141 @@ agile_skill_architecture/
 └── requirements.txt
 ```
 
+---
+
+## Application of Literate-like programming, Pseudo-coding techniques before software developer touches the editor.
+
+In a large team, think of this for example - people write documents like these and have it approved, no actual coding is done until Sprint-0 is over.
+
+```
+story: "A customer can reset their password."
+id: "STORY-1042"
+status: "active"
+tags: ["auth", "security", "customer-flow"]
+
+# ==============================================================================
+# 1. ACCEPTANCE CRITERIA
+# ==============================================================================
+acceptance_criteria:
+  - id: "AC-1"
+    given: "An authenticated or unauthenticated user on the password reset page"
+    when: "They submit a valid registered email address"
+    then: "A cryptographically secure, time-limited reset token is generated and emailed within 5 seconds."
+
+  - id: "AC-2"
+    given: "An invalid, unregistered, or malformed email address is submitted"
+    when: "The user submits the form"
+    then: "A generic confirmation response is displayed to prevent email enumeration attacks."
+
+  - id: "AC-3"
+    given: "A valid reset token"
+    when: "The token is used after 15 minutes or reused"
+    then: "The request is rejected with an expired token error."
+
+# ==============================================================================
+# 2. EXAMPLES / SCENARIOS (Executable Specification)
+# ==============================================================================
+scenarios:
+  - name: "Successful Password Reset Request"
+    given:
+      user_exists: true
+      email: "alex@example.com"
+      rate_limit_exceeded: false
+    when:
+      action: "request_password_reset"
+      email: "alex@example.com"
+    then:
+      response_status: 200
+      message: "If that email exists in our system, we've sent instructions to reset your password."
+      email_dispatched: true
+      token_validity_minutes: 15
+
+  - name: "Prevent User Enumeration on Unregistered Email"
+    given:
+      user_exists: false
+      email: "unknown@example.com"
+    when:
+      action: "request_password_reset"
+      email: "unknown@example.com"
+    then:
+      response_status: 200
+      message: "If that email exists in our system, we've sent instructions to reset your password."
+      email_dispatched: false
+
+# ==============================================================================
+# 3. TESTS (Binding the Specification to Executable Suite)
+# ==============================================================================
+tests:
+  unit_tests:
+    - path: "tests/unit/services/token_generator_test.py"
+      covers: ["AC-1", "AC-3"]
+      hash: "a4f88c2"
+  integration_tests:
+    - path: "tests/integration/auth/password_reset_spec.rs"
+      covers: ["AC-1", "AC-2", "AC-3"]
+      hash: "e912b40"
+
+# ==============================================================================
+# 4. IMPLEMENTATION (Literate Code Transclusion)
+# ==============================================================================
+implementation:
+  entrypoint: "src/auth/password_reset.rs"
+  code_snippet: |
+    pub async fn handle_reset_request(
+        State(state): State<AppState>,
+        Json(payload): Json<ResetRequest>,
+    ) -> Result<HttpResponse, AuthError> {
+        // Enforce generic response regardless of user existence (AC-2)
+        let user = state.users.find_by_email(&payload.email).await;
+        
+        if let Some(user) = user {
+            let token = state.tokens.generate_reset_token(user.id, Duration::from_mins(15)).await?;
+            state.mailer.send_reset_link(&user.email, &token).await?;
+        }
+
+        Ok(HttpResponse::Ok().json(GENERIC_RESET_RESPONSE))
+    }
+
+# ==============================================================================
+# 5. AI-GENERATED EXPLANATION (Human & Agent Context Layer)
+# ==============================================================================
+ai_explanation:
+  summary: |
+    This module handles self-service password recovery. To mitigate security risks,
+    it implements constant-time processing and generic success messaging to shield
+    user existence status from malicious probes.
+  key_design_decisions:
+    - decision: "15-minute token TTL"
+      rationale: "Balances user convenience against window of compromise if an email account is left open."
+    - decision: "Uniform response output"
+      rationale: "Fulfills OWASP guidelines against account enumeration."
+
+# ==============================================================================
+# 6. CI FEEDBACK & STATE SYNC (Living Verification Vector)
+# ==============================================================================
+ci_status:
+  last_build_id: "CI-8921"
+  timestamp: "2026-10-01T22:15:00Z"
+  spec_coverage: 100%
+  status: "PASSED"
+  traceability_matrix:
+    AC-1: "PASSED (tests/integration/auth/password_reset_spec.rs::test_valid_reset)"
+    AC-2: "PASSED (tests/integration/auth/password_reset_spec.rs::test_enumeration_shield)"
+    AC-3: "PASSED (tests/unit/services/token_generator_test.py::test_token_expiry)"
+
+# ==============================================================================
+# 7. UPDATED LIVING SPECIFICATION (Feedback Loop / Auto-Evolved State)
+# ==============================================================================
+evolution_log:
+  - version: "1.0.0"
+    trigger: "Initial requirement drafting"
+  - version: "1.1.0"
+    trigger: "CI-8901 failure: Rate limiting unmentioned"
+    resolution: "Added edge-case handling for 429 Too Many Requests; updated AC-1."
+```
+
+The above is what true literate programming is - the other way around - the 'literatists' ("literate-infused" business analysts and product owners) write the logic, the developers write the code infused with the logic docs.
+
 ## Role-Based Accountability Matrix for Cognitive Architecture
 
 An **Accountability Matrix** (inspired by frameworks like **RACI/RBAC**) is a structured tool that defines clear roles and responsibilities across a workflow. In traditional software development, ambiguity over who owns what leads to endless meetings, misaligned expectations, and handoff friction.
@@ -166,3 +304,5 @@ S1: **Intent & Boundaries**  ➜  S2:** Abstraction Mapping ** ➜  S3: **Verifi
 * **QA Lead / Team Representative (Accountable - Human Signoff):** Receives an ephemeral email via the temporary email router summarizing system readiness. Reviews the 1-2-3 validation check and grants approval.
 * **Entire Team (Informed):** Receives the final verified blueprint via automated cell notifications, triggering AI code and infrastructure synthesis.
 * **System Execution:** The `ScrumMasterAgent` and `CommsAgent` invoke the `agilist_loop` skill to send temporary emails and track human verification status.
+
+(c) 2026- JP | The AgileCodex
