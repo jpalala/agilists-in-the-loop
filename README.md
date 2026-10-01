@@ -30,11 +30,12 @@ Through this approach, Literate Programming becomes more than a documentation te
 
 ---
 
-XP relies on five core values: Communication, Simplicity, Feedback, Courage, and Respect.
+**XP** (eXtreme Programming) relies on five core values: **Communication, Simplicity, Feedback, Courage, and Respect**.
 
 I like the idea, although I wonder how realistic it is to expect everyone on a team to consistently behave according to the same values. And perhaps the future of software development makes this question even stranger. What happens when teams no longer need to talk to each other directly? Instead, they talk to AI, let AI talk back, and feed each other AI-generated content. At some point, you have to wonder: what value is left in communication if everything is being communicated through AI?
 
 Maybe there is a way to merge these two disciplines. “Agile Programming” sounds a little awkward—as if I’m trying too hard to invent a new concept. But perhaps that is the point. As the Frenchman Alphonse Karr famously wrote, “The more things change, the more they remain the same.”
+
 
 ---
 
