@@ -19,17 +19,15 @@ Maybe there is a way to merge these two disciplines. “Agile Programming” sou
 
 ---
 
-## The MODERN (BREAKTHROUGH) AGILE MANIFESTO (REIMAGINED)
+## The MODERN BETTER AGILE MANIFESTO 
 
-    1. Shared Mental Models & Intent   OVER   Prompt Generation & Synthetic Text
-    2. Verifiable System Behavior      OVER   Volume of Synthesized Code
-    3. Collaborative Co-Creation       OVER   Isolated Human-to-AI Siloes
-    4. Continuous Strategic Steering   OVER   Blind Execution of Generated Plans
+I can hear the screams of the Agile purists/dogmatists.
 
-Why this simple idea is not implemented still bothers me. 
 
-What continues to bother me is how simple this idea seems—and yet how rarely it appears to be implemented in practice.
-What continues to bother me is how simple this core idea is—and how rarely it is put into practice.
+1. **Shared Mental Models & Intent**   OVER   **Prompt Generation & Synthetic Text**
+2. **Verifiable System Behavior**      OVER   **Volume of Synthesized Code**
+3. **Collaborative Co-Creation**       OVER   **Isolated Human-to-AI Siloes**
+4. **Continuous Strategic Steering**   OVER   **Blind Execution of Generated Plans**
 
 We may still be approaching AI-assisted software development from the wrong angle. We have become exceptional at generating code, prompts, plans, and documentation, but that hasn't made us better at building software together.
 
